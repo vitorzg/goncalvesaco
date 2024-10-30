@@ -21,11 +21,6 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
-    - name: Set up Docker Compose
-      run: |
-        docker --version  # Verifica se o Docker está instalado
-        docker-compose --version  # Verifica se o Docker Compose está instalado
-
     - name: Build and run Docker Compose
       run: docker compose up --build -d
 
