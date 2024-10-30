@@ -1,48 +1,53 @@
 package dev.vitorzucon.goncalvesaco.infrastructure.gateways;
 
-import dev.vitorzucon.goncalvesaco.application.gateways.IUserGateway;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import java.util.List;
+import java.util.Arrays;
+import java.util.Optional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import dev.vitorzucon.goncalvesaco.domain.entities.User;
 import dev.vitorzucon.goncalvesaco.infrastructure.persistence.UserEntity;
 import dev.vitorzucon.goncalvesaco.infrastructure.persistence.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 class UserRepositoryGatewayTest {
 
+    @Mock
     private UserRepository userRepository;
+
+    @Mock
     private UserEntityMapper userEntityMapper;
-    private IUserGateway userGateway;
+
+    @Autowired
+    @InjectMocks
+    private UserRepositoryGateway userRepositoryGateway;
 
     @BeforeEach
-    void setUp() {
-        userRepository = Mockito.mock(UserRepository.class);
-        userEntityMapper = Mockito.mock(UserEntityMapper.class);
-        userGateway = new UserRepositoryGateway(userRepository, userEntityMapper);
+    void setup() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
     void testCreateUser() {
-        // Arrange
-        User user = new User("Teste User", "login", "password", "email@example.com");
-        UserEntity userEntity = new UserEntity(); // Preencha com dados necessários
-        when(userEntityMapper.toEntity(user)).thenReturn(userEntity);
+        User userDomainObj = new User("FullName", "login", "pass", "email@example.com");
+        UserEntity userEntity = new UserEntity("FullName", "login", "pass", "email@example.com");
+        when(userEntityMapper.toEntity(userDomainObj)).thenReturn(userEntity);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
-        when(userEntityMapper.toDomain(userEntity)).thenReturn(user);
+        when(userEntityMapper.toDomain(userEntity)).thenReturn(userDomainObj);
 
         // Act
-        User createdUser = userGateway.createUser(user);
+        User createdUser = userRepositoryGateway.createUser(userDomainObj);
 
         // Assert
-        assertEquals(user, createdUser);
-        verify(userEntityMapper).toEntity(user);
+        assertEquals(userDomainObj, createdUser);
+        verify(userEntityMapper).toEntity(userDomainObj);
         verify(userRepository).save(userEntity);
         verify(userEntityMapper).toDomain(userEntity);
     }
@@ -57,7 +62,7 @@ class UserRepositoryGatewayTest {
         when(userEntityMapper.toDomain(userEntity)).thenReturn(user);
 
         // Act
-        User foundUser = userGateway.findUser(userId);
+        User foundUser = userRepositoryGateway.findUser(userId);
 
         // Assert
         assertEquals(user, foundUser);
@@ -78,7 +83,7 @@ class UserRepositoryGatewayTest {
         when(userEntityMapper.toDomain(userEntity2)).thenReturn(user2);
 
         // Act
-        List<User> foundUsers = userGateway.findAllUsers();
+        List<User> foundUsers = userRepositoryGateway.findAllUsers();
 
         // Assert
         assertEquals(2, foundUsers.size());
@@ -93,7 +98,7 @@ class UserRepositoryGatewayTest {
         String userId = "123";
 
         // Act
-        userGateway.deleteUser(userId);
+        userRepositoryGateway.deleteUser(userId);
 
         // Assert
         verify(userRepository).deleteById(userId);
@@ -101,15 +106,17 @@ class UserRepositoryGatewayTest {
 
     @Test
     void testUpdateUser() {
+
         // Arrange
         String id = "123";
         User newUser = new User("Updated User", "login", "newPassword", "newEmail@example.com");
         UserEntity oldUserEntity = new UserEntity("Old User", "oldLogin", "oldPassword", "oldEmail@example.com");
+
         when(userRepository.findById(id)).thenReturn(Optional.of(oldUserEntity));
         when(userEntityMapper.toEntity(newUser)).thenReturn(new UserEntity());
 
         // Act
-        userGateway.updateUser(id, newUser);
+        userRepositoryGateway.updateUser(id, newUser);
 
         // Assert
         assertEquals("Updated User", oldUserEntity.getFullName());
@@ -118,7 +125,6 @@ class UserRepositoryGatewayTest {
         assertEquals("newPassword", oldUserEntity.getPwd());
 
         verify(userRepository).findById(id);
-        verify(userRepository).save(oldUserEntity);
+        verify(userRepository).save(oldUserEntity); // Verifica se o repositório save foi chamado
     }
-
 }
