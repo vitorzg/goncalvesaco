@@ -5,7 +5,7 @@ import dev.vitorzucon.goncalvesaco.infrastructure.persistence.UserEntity;
 
 public class UserEntityMapper {
 
-    UserEntity toEntity(User userDomainObj) {
+    public UserEntity toEntity(User userDomainObj) {
         return new UserEntity(
                 userDomainObj.email(),
                 userDomainObj.fullName(),
@@ -13,7 +13,7 @@ public class UserEntityMapper {
                 userDomainObj.pwd());
     }
 
-    User toDomain(UserEntity userEntity) {
+    public User toDomain(UserEntity userEntity) {
         return new User(userEntity.getFullName(), userEntity.getLogin(), userEntity.getPwd(), userEntity.getEmail());
     }
 }
