@@ -1,7 +1,6 @@
-package dev.vitorzucon.goncalvesaco;
+package dev.vitorzucon.goncalvesaco.application.usecases;
 
 import dev.vitorzucon.goncalvesaco.application.gateways.IUserGateway;
-import dev.vitorzucon.goncalvesaco.application.usecases.UserInteractor;
 import dev.vitorzucon.goncalvesaco.domain.entities.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

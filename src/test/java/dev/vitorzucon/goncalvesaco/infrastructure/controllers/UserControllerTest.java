@@ -1,4 +1,4 @@
-package dev.vitorzucon.goncalvesaco;
+package dev.vitorzucon.goncalvesaco.infrastructure.controllers;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -6,7 +6,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import dev.vitorzucon.goncalvesaco.application.usecases.UserInteractor;
 import dev.vitorzucon.goncalvesaco.domain.entities.User;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.UserController;
 import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOMapper;
 import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTORequest;
 import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOResponse;

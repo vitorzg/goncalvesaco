@@ -1,9 +1,7 @@
-package dev.vitorzucon.goncalvesaco;
+package dev.vitorzucon.goncalvesaco.infrastructure.gateways;
 
 import dev.vitorzucon.goncalvesaco.application.gateways.IUserGateway;
 import dev.vitorzucon.goncalvesaco.domain.entities.User;
-import dev.vitorzucon.goncalvesaco.infrastructure.gateways.UserEntityMapper;
-import dev.vitorzucon.goncalvesaco.infrastructure.gateways.UserRepositoryGateway;
 import dev.vitorzucon.goncalvesaco.infrastructure.persistence.UserEntity;
 import dev.vitorzucon.goncalvesaco.infrastructure.persistence.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
