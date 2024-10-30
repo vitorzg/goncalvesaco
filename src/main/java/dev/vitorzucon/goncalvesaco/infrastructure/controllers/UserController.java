@@ -35,7 +35,7 @@ public class UserController {
         User newUser = userDTOMapper.toUser(requestObj);
         User savedUser = userInteractor.createUser(newUser);
         UserDTOResponse response = userDTOMapper.toResponse(savedUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response); // 201 Created
+        return ResponseEntity.status(HttpStatus.CREATED).body(response); 
     }
 
     @GetMapping("/{id}")
@@ -45,7 +45,7 @@ public class UserController {
             UserDTOResponse response = userDTOMapper.toResponse(user);
             return ResponseEntity.ok(response); // 200 OK
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // 404 Not Found
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
         }
     }
 
