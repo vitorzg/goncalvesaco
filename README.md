@@ -2,7 +2,7 @@
 
 ## ⚙️ Java Setup
 
-Este é um  em Java 21 usando o Maven como gerenciador de dependências. 
+Este é um  em Java 21 usando o Maven como gerenciador de dependências
 
 ## Pré-requisitos
 
