@@ -45,13 +45,13 @@ public class UserRepositoryGateway implements IUserGateway {
 
     @Override
     @Transactional
-    public void updateUser(String id, User newUser) {
-        UserEntity oldUser = userRepository.findById(id).get();
-        oldUser.setFullName(newUser.fullName());
-        oldUser.setEmail(newUser.email());
-        oldUser.setLogin(newUser.login());
-        oldUser.setPwd(newUser.pwd());
-        userRepository.save(oldUser);
+    public void updateUser(User newUser) {
+        UserEntity user = userRepository.findById(newUser.id()).get();
+        user.setFullName(newUser.fullName());
+        user.setEmail(newUser.email());
+        user.setLogin(newUser.login());
+        user.setPwd(newUser.pwd());
+        userRepository.save(user);
     }
 
 }

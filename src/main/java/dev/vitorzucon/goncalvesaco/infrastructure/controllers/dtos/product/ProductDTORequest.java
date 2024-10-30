@@ -1,9 +1,8 @@
-package dev.vitorzucon.goncalvesaco.domain.entities;
+package dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.product;
 
 import java.math.BigDecimal;
 
-public record Product(
-        Long id,
+public record ProductDTORequest(
         String name,
         String description,
         String imagePath,

@@ -1,4 +1,4 @@
-package dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos;
+package dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user;
 
 public record UserDTORequest(
                 String fullName,

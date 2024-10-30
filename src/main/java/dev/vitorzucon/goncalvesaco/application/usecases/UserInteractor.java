@@ -28,8 +28,8 @@ public class UserInteractor {
         userGateway.deleteUser(id);
     }
 
-    public void updateUser(String id,User user){
-        userGateway.updateUser(id, user);
+    public void updateUser(User user){
+        userGateway.updateUser( user);
     }
 
 }

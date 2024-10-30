@@ -36,7 +36,7 @@ class UserRepositoryGatewayTest {
 
     @Test
     void testCreateUser() {
-        User userDomainObj = new User("FullName", "login", "pass", "email@example.com");
+        User userDomainObj = new User("123", "FullName", "login", "pass", "email@example.com");
         UserEntity userEntity = new UserEntity("FullName", "login", "pass", "email@example.com");
         when(userEntityMapper.toEntity(userDomainObj)).thenReturn(userEntity);
         when(userRepository.save(userEntity)).thenReturn(userEntity);
@@ -57,7 +57,7 @@ class UserRepositoryGatewayTest {
         // Arrange
         String userId = "123";
         UserEntity userEntity = new UserEntity(); // Preencha com dados necessários
-        User user = new User("Teste User", "login", "password", "email@example.com");
+        User user = new User("123", "Teste User", "login", "password", "email@example.com");
         when(userRepository.findById(userId)).thenReturn(Optional.of(userEntity));
         when(userEntityMapper.toDomain(userEntity)).thenReturn(user);
 
@@ -75,8 +75,8 @@ class UserRepositoryGatewayTest {
         // Arrange
         UserEntity userEntity1 = new UserEntity("User 1", "login1", "password1", "email1@example.com");
         UserEntity userEntity2 = new UserEntity("User 2", "login2", "password2", "email2@example.com");
-        User user1 = new User("User 1", "login1", "password1", "email1@example.com");
-        User user2 = new User("User 2", "login2", "password2", "email2@example.com");
+        User user1 = new User("123", "User 1", "login1", "password1", "email1@example.com");
+        User user2 = new User("122", "User 2", "login2", "password2", "email2@example.com");
 
         when(userRepository.findAll()).thenReturn(Arrays.asList(userEntity1, userEntity2));
         when(userEntityMapper.toDomain(userEntity1)).thenReturn(user1);
@@ -109,14 +109,14 @@ class UserRepositoryGatewayTest {
 
         // Arrange
         String id = "123";
-        User newUser = new User("Updated User", "login", "newPassword", "newEmail@example.com");
+        User newUser = new User("123", "Updated User", "login", "newPassword", "newEmail@example.com");
         UserEntity oldUserEntity = new UserEntity("Old User", "oldLogin", "oldPassword", "oldEmail@example.com");
 
         when(userRepository.findById(id)).thenReturn(Optional.of(oldUserEntity));
         when(userEntityMapper.toEntity(newUser)).thenReturn(new UserEntity());
 
         // Act
-        userRepositoryGateway.updateUser(id, newUser);
+        userRepositoryGateway.updateUser(newUser);
 
         // Assert
         assertEquals("Updated User", oldUserEntity.getFullName());

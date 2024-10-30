@@ -27,7 +27,7 @@ class UserInteractorTest {
     @Test
     void testCreateUser() {
         // Arrange
-        User user = new User("Teste User", "login", "password", "email@example.com");
+        User user = new User("123","Teste User", "login", "password", "email@example.com");
         Mockito.when(userGateway.createUser(any(User.class))).thenReturn(user);
 
         // Act
@@ -42,7 +42,7 @@ class UserInteractorTest {
     void testFindUser() {
         // Arrange
         String userId = "123";
-        User user = new User("Teste User", "login", "password", "email@example.com");
+        User user = new User(userId,"Teste User", "login", "password", "email@example.com");
         Mockito.when(userGateway.findUser(userId)).thenReturn(user);
 
         // Act
@@ -57,8 +57,8 @@ class UserInteractorTest {
     void testFindAllUsers() {
         // Arrange
         List<User> users = new ArrayList<>();
-        users.add(new User("User 1", "login1", "password1", "email1@example.com"));
-        users.add(new User("User 2", "login2", "password2", "email2@example.com"));
+        users.add(new User("123","User 1", "login1", "password1", "email1@example.com"));
+        users.add(new User("124","User 2", "login2", "password2", "email2@example.com"));
         Mockito.when(userGateway.findAllUsers()).thenReturn(users);
 
         // Act
@@ -84,12 +84,12 @@ class UserInteractorTest {
     void testUpdateUser() {
         // Arrange
         String id = "123";
-        User user = new User("Updated User", "login", "newPassword", "newEmail@example.com");
+        User user = new User(id,"Updated User", "login", "newPassword", "newEmail@example.com");
 
         // Act
-        userInteractor.updateUser(id,user);
+        userInteractor.updateUser(user);
 
         // Assert
-        verify(userGateway).updateUser(id,user);
+        verify(userGateway).updateUser(user);
     }
 }

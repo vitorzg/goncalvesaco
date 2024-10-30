@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record Budget(
+    Long id,
                 String clientName,
                 String clientEmail,
                 int clientDoc,

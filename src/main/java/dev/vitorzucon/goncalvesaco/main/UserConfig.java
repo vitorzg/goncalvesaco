@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Configuration;
 
 import dev.vitorzucon.goncalvesaco.application.gateways.IUserGateway;
 import dev.vitorzucon.goncalvesaco.application.usecases.UserInteractor;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOMapper;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTOMapper;
 import dev.vitorzucon.goncalvesaco.infrastructure.gateways.UserEntityMapper;
 import dev.vitorzucon.goncalvesaco.infrastructure.gateways.UserRepositoryGateway;
 import dev.vitorzucon.goncalvesaco.infrastructure.persistence.UserRepository;

@@ -6,9 +6,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import dev.vitorzucon.goncalvesaco.application.usecases.UserInteractor;
 import dev.vitorzucon.goncalvesaco.domain.entities.User;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOMapper;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTORequest;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOResponse;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTOMapper;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTORequest;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTOResponse;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -45,11 +45,11 @@ class UserControllerTest {
     void testCreateUser() throws Exception {
         // Arrange
         UserDTORequest request = new UserDTORequest("New User", "login", "password", "email@example.com");
-        User user = new User("New User", "login", "password", "email@example.com");
-        User savedUser = new User("New User", "login", "password", "email@example.com");
-        UserDTOResponse response = new UserDTOResponse("New User", "login", "email@example.com");
+        User user = new User("123", "New User", "login", "password", "email@example.com");
+        User savedUser = new User("123", "New User", "login", "password", "email@example.com");
+        UserDTOResponse response = new UserDTOResponse("123", "New User", "login", "email@example.com");
 
-        when(userDTOMapper.toUser(request)).thenReturn(user);
+        when(userDTOMapper.toDomain(request)).thenReturn(user);
         when(userInteractor.createUser(user)).thenReturn(savedUser);
         when(userDTOMapper.toResponse(savedUser)).thenReturn(response);
 
@@ -66,8 +66,8 @@ class UserControllerTest {
     void testFindUser() throws Exception {
         // Arrange
         String id = "123";
-        User user = new User("Test User", "login", "password", "email@example.com");
-        UserDTOResponse response = new UserDTOResponse("Test User", "login", "email@example.com");
+        User user = new User("123", "Test User", "login", "password", "email@example.com");
+        UserDTOResponse response = new UserDTOResponse("123", "Test User", "login", "email@example.com");
 
         when(userInteractor.findUser(id)).thenReturn(user);
         when(userDTOMapper.toResponse(user)).thenReturn(response);
@@ -81,10 +81,10 @@ class UserControllerTest {
     @Test
     void testFindAllUsers() throws Exception {
         // Arrange
-        User user1 = new User("User One", "login1", "password1", "email1@example.com");
-        User user2 = new User("User Two", "login2", "password2", "email2@example.com");
-        UserDTOResponse response1 = new UserDTOResponse("User One", "login1", "email1@example.com");
-        UserDTOResponse response2 = new UserDTOResponse("User Two", "login2", "email2@example.com");
+        User user1 = new User("123", "User One", "login1", "password1", "email1@example.com");
+        User user2 = new User("122", "User Two", "login2", "password2", "email2@example.com");
+        UserDTOResponse response1 = new UserDTOResponse("123", "User One", "login1", "email1@example.com");
+        UserDTOResponse response2 = new UserDTOResponse("122", "User Two", "login2", "email2@example.com");
         List<User> users = Arrays.asList(user1, user2);
 
         when(userInteractor.findAllUsers()).thenReturn(users);
@@ -111,21 +111,39 @@ class UserControllerTest {
 
     @Test
     void testUpdateUser() throws Exception {
-        // Arrange
+        // Cenário 1: Atualização bem-sucedida
         String id = "123";
         UserDTORequest request = new UserDTORequest("Updated User", "login", "newPassword", "newEmail@example.com");
-        User updatedUser = new User("Updated User", "login", "newPassword", "newEmail@example.com");
-        UserDTOResponse response = new UserDTOResponse("Updated User", "login", "newEmail@example.com");
+        User updatedUser = new User(id, "Updated User", "login", "newPassword", "newEmail@example.com");
+        UserDTOResponse response = new UserDTOResponse(id, "Updated User", "login", "newEmail@example.com");
 
-        when(userDTOMapper.toUser(request)).thenReturn(updatedUser);
+        // Simula o comportamento esperado
+        when(userDTOMapper.toDomain(request)).thenReturn(updatedUser);
         when(userDTOMapper.toResponse(updatedUser)).thenReturn(response);
 
-        // Act & Assert
-        mockMvc.perform(put("/users/{id}", id)
+        // Executa a requisição PUT e verifica a resposta
+        mockMvc.perform(put("/users/update/{id}", id)
                 .contentType("application/json")
                 .content(
                         "{\"fullName\":\"Updated User\",\"login\":\"login\",\"pwd\":\"newPassword\",\"email\":\"newEmail@example.com\"}"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.fullName").value("Updated User"));
+                .andExpect(status().isOk()) // Verifica o status 200 OK
+                .andExpect(jsonPath("$.fullName").value("Updated User")) // Verifica o valor retornado no JSON
+                .andExpect(jsonPath("$.email").value("newEmail@example.com")); // Verifica se o email foi atualizado
+
+        // Cenário 2: Erro interno no servidor
+        String errorId = "456";
+        UserDTORequest errorRequest = new UserDTORequest("Error User", "login", "errorPassword",
+                "errorEmail@example.com");
+        User errorUser = new User(errorId, "Error User", "login", "errorPassword", "errorEmail@example.com");
+
+        when(userDTOMapper.toDomain(errorRequest)).thenReturn(errorUser);
+        doThrow(new RuntimeException("Update error")).when(userInteractor).updateUser(errorUser);
+
+        mockMvc.perform(put("/users/update/{id}", errorId)
+                .contentType("application/json")
+                .content(
+                        "{\"fullName\":\"Error User\",\"login\":\"login\",\"pwd\":\"errorPassword\",\"email\":\"errorEmail@example.com\"}"))
+                .andExpect(status().isInternalServerError()); // Verifica o status 500 Internal Server Error
     }
+
 }

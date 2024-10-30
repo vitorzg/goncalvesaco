@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import dev.vitorzucon.goncalvesaco.application.usecases.UserInteractor;
 import dev.vitorzucon.goncalvesaco.domain.entities.User;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOMapper;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTORequest;
-import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.UserDTOResponse;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTOMapper;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTORequest;
+import dev.vitorzucon.goncalvesaco.infrastructure.controllers.dtos.user.UserDTOResponse;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,8 +22,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserInteractor userInteractor;
-    private UserDTOMapper userDTOMapper;
+    private final UserInteractor userInteractor;
+    private final UserDTOMapper userDTOMapper;
 
     public UserController(UserInteractor userInteractor, UserDTOMapper userDTOMapper) {
         this.userInteractor = userInteractor;
@@ -32,10 +32,10 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<UserDTOResponse> create(@RequestBody UserDTORequest requestObj) {
-        User newUser = userDTOMapper.toUser(requestObj);
+        User newUser = userDTOMapper.toDomain(requestObj);
         User savedUser = userInteractor.createUser(newUser);
         UserDTOResponse response = userDTOMapper.toResponse(savedUser);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response); 
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/{id}")
@@ -68,12 +68,11 @@ public class UserController {
         }
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<UserDTOResponse> updateUser(@PathVariable String id, @RequestBody UserDTORequest requestObj) {
-        User updatedUser = userDTOMapper.toUser(requestObj);
-
+        User updatedUser = userDTOMapper.toDomain(requestObj);
         try {
-            userInteractor.updateUser(id, updatedUser);
+            userInteractor.updateUser(updatedUser);
             UserDTOResponse response = userDTOMapper.toResponse(updatedUser);
             return ResponseEntity.ok(response); // 200 OK
         } catch (Exception e) {

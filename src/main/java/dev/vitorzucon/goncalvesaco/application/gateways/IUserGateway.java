@@ -12,5 +12,5 @@ public interface IUserGateway {
 
     void deleteUser(String id);
 
-    void updateUser(String id,User user);
+    void updateUser(User user);
 }
