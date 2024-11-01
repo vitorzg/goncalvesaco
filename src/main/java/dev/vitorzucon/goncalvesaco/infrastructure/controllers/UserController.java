@@ -69,14 +69,24 @@ public class UserController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<UserDTOResponse> updateUser(@PathVariable String id, @RequestBody UserDTORequest requestObj) {
-        User updatedUser = userDTOMapper.toDomain(requestObj);
+    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody UserDTORequest requestObj) {
         try {
-            userInteractor.updateUser(updatedUser);
-            UserDTOResponse response = userDTOMapper.toResponse(updatedUser);
-            return ResponseEntity.ok(response); // 200 OK
+            User existingUser = userInteractor.findUser(id);
+
+            if (existingUser == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("Usuário não encontrado");
+            }
+
+            User newUser = new User(id, requestObj.fullName(), requestObj.login(), existingUser.pwd(),
+                    requestObj.email());
+
+            userInteractor.updateUser(newUser);
+
+            return ResponseEntity.ok("Usuário atualizado com sucesso");
+
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar o usuário.");
         }
     }
 

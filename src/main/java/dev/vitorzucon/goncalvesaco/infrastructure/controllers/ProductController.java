@@ -80,18 +80,19 @@ public class ProductController {
     @PutMapping("/update/{id}")
     public ResponseEntity<ProductDTOResponse> updateProduct(@PathVariable Long id,
             @RequestBody ProductDTORequest requestObj) {
-        Product product = productInteractor.findProduct(id);
-        if (product != null) {
+        Product existingProduct = productInteractor.findProduct(id);
+        if (existingProduct != null) {
             try {
-                Product updatedProduct = productDTOMapper.toDomain(requestObj);
-                productInteractor.updateProduct(updatedProduct);
-                ProductDTOResponse response = productDTOMapper.toResponse(updatedProduct);
+                Product newProduct = new Product(id, requestObj.name(), requestObj.description(),
+                        requestObj.imagePath(), requestObj.price());
+                productInteractor.updateProduct(newProduct);
+                ProductDTOResponse response = productDTOMapper.toResponse(newProduct);
                 return ResponseEntity.ok(response);
             } catch (Exception e) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
             }
         } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(productDTOMapper.toResponse(product));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(productDTOMapper.toResponse(existingProduct));
         }
     }
 
