@@ -3,7 +3,7 @@ package br.com.goncalvesaco.ecommerce.core.entities;
 import java.util.Date;
 import java.util.List;
 
-public record customerOrder(
+public record CustomerOrder(
         int id,
         String customer_name,
         String customer_phone,
@@ -12,7 +12,7 @@ public record customerOrder(
         PaymentMethod payment_method,
         float total_price,
         String obs,
-        int order_status,
+        OrderStatus order_status,
         Date created_at,
         Date updated_at
 ) {
