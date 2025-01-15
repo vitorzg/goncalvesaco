@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 public record CustomerOrder(
-        int id,
         String customer_name,
         String customer_phone,
         String customer_address,

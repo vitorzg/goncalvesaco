@@ -5,7 +5,6 @@ import br.com.goncalvesaco.ecommerce.infra.persistence.models.UserEntity;
 import java.util.List;
 
 public record User(
-        String id,
         String full_name,
         String username,
         String email,
@@ -13,7 +12,7 @@ public record User(
 ) {
 
     public static User toUserDomain(UserEntity user) {
-        return new User(user.getId(), user.getFull_name(), user.getUsername(), user.getEmail(), user.getPassword());
+        return new User(user.getFull_name(), user.getUsername(), user.getEmail(), user.getPassword());
     }
 
     public static List<User> toUsersDomain(List<UserEntity> usersList){
