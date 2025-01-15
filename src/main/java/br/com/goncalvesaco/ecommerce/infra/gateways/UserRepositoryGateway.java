@@ -22,14 +22,14 @@ public class UserRepositoryGateway implements UserRepositoryGatewayCore {
 
     @Override
     public User findUser(String id) {
-        return userRepository.findById(id)
-                .map(User::toUserDomain)
-                .orElseThrow(() -> new UserNotFoundException("User with ID " + id + " not found"));
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+        return userEntityMapper.toDomain(userEntity);
     }
 
     @Override
     public List<User> findAllUsers() {
-        return User.toUsersDomain((List<UserEntity>) userRepository.findAll());
+        return null;
     }
 
     @Override

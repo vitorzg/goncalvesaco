@@ -6,6 +6,7 @@ import br.com.goncalvesaco.ecommerce.infra.dtos.UserDTOMapper;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/user")
@@ -26,7 +27,8 @@ public class UserController {
 
     @GetMapping("/{id}")
     UserResponse findOneUser(@PathVariable String id){
-        return userDTOMapper.toResponse(userUseCase.findUser(id));
+        User user = userUseCase.findUser(id);
+        return userDTOMapper.toResponse(user);
     }
 
     @PostMapping
