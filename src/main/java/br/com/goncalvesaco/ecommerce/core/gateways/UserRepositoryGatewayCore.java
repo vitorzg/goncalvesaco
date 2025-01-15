@@ -8,7 +8,7 @@ public interface UserRepositoryGatewayCore {
 
     User findUser(String id);
     List<User> findAllUsers();
-    void addUser(User newUser);
+    User addUser(User newUser);
     void deleteUser(String userId);
     User updateUser(User userUpdated);
 }

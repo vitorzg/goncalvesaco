@@ -3,6 +3,7 @@ package br.com.goncalvesaco.ecommerce.main;
 import br.com.goncalvesaco.ecommerce.core.gateways.UserRepositoryGatewayCore;
 import br.com.goncalvesaco.ecommerce.core.usecases.UserUseCase;
 import br.com.goncalvesaco.ecommerce.infra.dtos.UserDTOMapper;
+import br.com.goncalvesaco.ecommerce.infra.gateways.UserEntityMapper;
 import br.com.goncalvesaco.ecommerce.infra.gateways.UserRepositoryGateway;
 import br.com.goncalvesaco.ecommerce.infra.persistence.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
@@ -17,12 +18,17 @@ public class AppConfig {
     }
 
     @Bean
-    UserRepositoryGateway userGateway(UserRepository userRepository){
-        return new UserRepositoryGateway(userRepository);
+    UserRepositoryGateway userGateway(UserRepository userRepository, UserEntityMapper userEntityMapper){
+        return new UserRepositoryGateway(userRepository, userEntityMapper);
     }
 
     @Bean
     UserDTOMapper userDTOMapper(){
         return new UserDTOMapper();
+    }
+
+    @Bean
+    UserEntityMapper userEntityMapper(){
+        return new UserEntityMapper();
     }
 }

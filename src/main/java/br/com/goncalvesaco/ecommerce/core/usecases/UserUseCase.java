@@ -21,8 +21,8 @@ public class UserUseCase {
         return userRepositoryGatewayCore.findUser(id);
     }
 
-    public void addUser(User newUser){
-        userRepositoryGatewayCore.addUser(newUser);
+    public User addUser(User newUser){
+        return userRepositoryGatewayCore.addUser(newUser);
     }
 
     public void deleteUser(String userId){

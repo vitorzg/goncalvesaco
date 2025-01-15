@@ -13,9 +13,11 @@ import java.util.List;
 public class UserRepositoryGateway implements UserRepositoryGatewayCore {
 
     private final UserRepository userRepository;
+    private final UserEntityMapper userEntityMapper;
 
-    public UserRepositoryGateway(UserRepository userRepository) {
+    public UserRepositoryGateway(UserRepository userRepository, UserEntityMapper userEntityMapper) {
         this.userRepository = userRepository;
+        this.userEntityMapper = userEntityMapper;
     }
 
     @Override
@@ -31,8 +33,10 @@ public class UserRepositoryGateway implements UserRepositoryGatewayCore {
     }
 
     @Override
-    public void addUser(User newUser) {
-
+    public User addUser(User newUser) {
+        UserEntity userEntity = userEntityMapper.toEntity(newUser);
+        UserEntity savedUser = userRepository.save(userEntity);
+        return userEntityMapper.toDomain(savedUser);
     }
 
     @Override
