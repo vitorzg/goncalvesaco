@@ -8,6 +8,7 @@ import br.com.goncalvesaco.ecommerce.infra.persistence.repositories.UserReposito
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserRepositoryGateway implements UserRepositoryGatewayCore {
@@ -29,7 +30,10 @@ public class UserRepositoryGateway implements UserRepositoryGatewayCore {
 
     @Override
     public List<User> findAllUsers() {
-        return null;
+        List<UserEntity> users = (List<UserEntity>) userRepository.findAll();
+        return users.stream()
+                .map(userEntityMapper::toDomain)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -41,11 +45,17 @@ public class UserRepositoryGateway implements UserRepositoryGatewayCore {
 
     @Override
     public void deleteUser(String userId) {
-
+        if (!userRepository.existsById(userId)) {
+            throw new RuntimeException("Cannot delete. User not found with id: " + userId);
+        }
+        userRepository.deleteById(userId);
     }
 
     @Override
     public User updateUser(User userUpdated) {
+//        if (!userRepository.existsById(userUpdated.)) {
+//            throw new RuntimeException("Cannot update. User not found with id: " + userUpdated.getId());
+//        }
         return null;
     }
 }

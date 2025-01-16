@@ -3,10 +3,12 @@ package br.com.goncalvesaco.ecommerce.infra.controllers;
 import br.com.goncalvesaco.ecommerce.core.entities.User;
 import br.com.goncalvesaco.ecommerce.core.usecases.UserUseCase;
 import br.com.goncalvesaco.ecommerce.infra.dtos.UserDTOMapper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/user")
@@ -36,5 +38,15 @@ public class UserController {
         User newUser = userDTOMapper.toDomain(request);
         User userSaved = userUseCase.addUser(newUser);
         return userDTOMapper.toResponse(userSaved);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<String> deleteUser(@PathVariable String id){
+        try {
+            userUseCase.deleteUser(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id: " + '"' + id + '"');
+        }
     }
 }
