@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -48,5 +49,16 @@ public class UserController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id: " + '"' + id + '"');
         }
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody Map<String, Object> updates){
+        if (userUseCase.findUser(id) == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found with id: " + '"' + id + '"');
+        }
+
+        User updatedUser = userUseCase.updateUser(id, updates);
+
+        return ResponseEntity.ok("");
     }
 }

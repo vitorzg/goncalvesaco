@@ -4,6 +4,7 @@ import br.com.goncalvesaco.ecommerce.core.entities.User;
 import br.com.goncalvesaco.ecommerce.core.gateways.UserRepositoryGatewayCore;
 
 import java.util.List;
+import java.util.Map;
 
 public class UserUseCase {
 
@@ -29,7 +30,7 @@ public class UserUseCase {
         userRepositoryGatewayCore.deleteUser(userId);
     }
 
-    public User updateUser(User userUpdated){
-        return userRepositoryGatewayCore.updateUser(userUpdated);
+    public User updateUser(String userId, Map<String, Object> updates){
+        return userRepositoryGatewayCore.updateUser(userId, updates);
     }
 }

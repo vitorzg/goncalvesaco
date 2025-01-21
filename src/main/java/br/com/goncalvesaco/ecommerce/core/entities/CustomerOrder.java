@@ -7,7 +7,7 @@ public record CustomerOrder(
         String customer_name,
         String customer_phone,
         String customer_address,
-        List<Product> product_list,
+        List<ProductOrder> product_order_list,
         PaymentMethod payment_method,
         float total_price,
         String obs,

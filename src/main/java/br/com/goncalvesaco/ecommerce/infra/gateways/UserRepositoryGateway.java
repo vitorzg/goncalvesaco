@@ -6,8 +6,11 @@ import br.com.goncalvesaco.ecommerce.infra.exceptions.UserNotFoundException;
 import br.com.goncalvesaco.ecommerce.infra.persistence.models.UserEntity;
 import br.com.goncalvesaco.ecommerce.infra.persistence.repositories.UserRepository;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
@@ -52,10 +55,22 @@ public class UserRepositoryGateway implements UserRepositoryGatewayCore {
     }
 
     @Override
-    public User updateUser(User userUpdated) {
-//        if (!userRepository.existsById(userUpdated.)) {
-//            throw new RuntimeException("Cannot update. User not found with id: " + userUpdated.getId());
-//        }
-        return null;
+    public User updateUser(String userId, Map<String, Object> updates) {
+        UserEntity userEntity = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + userId));
+
+        updates.forEach((campo, valor) -> {
+            Field field = ReflectionUtils.findField(UserEntity.class, campo);
+            if (field == null) {
+                throw new IllegalArgumentException("Invalid field: " + campo);
+            }
+
+            field.setAccessible(true);
+            ReflectionUtils.setField(field, userEntity, valor);
+        });
+
+        UserEntity updatedEntity = userRepository.save(userEntity);
+
+        return userEntityMapper.toDomain(updatedEntity);
     }
 }
