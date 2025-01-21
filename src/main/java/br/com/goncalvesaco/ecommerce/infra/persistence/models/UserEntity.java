@@ -1,7 +1,15 @@
 package br.com.goncalvesaco.ecommerce.infra.persistence.models;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "users")
 public class UserEntity {
@@ -19,34 +27,4 @@ public class UserEntity {
     private String password;
 
 
-    public UserEntity() {
-    }
-
-    public UserEntity(String id,String password, String email, String username, String full_name) {
-        this.id = id;
-        this.password = password;
-        this.email = email;
-        this.username = username;
-        this.full_name = full_name;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public String getFull_name() {
-        return full_name;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }
