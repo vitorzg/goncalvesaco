@@ -5,10 +5,10 @@ import br.com.goncalvesaco.ecommerce.infra.persistence.models.UserEntity;
 
 public class UserEntityMapper {
     UserEntity toEntity(User userDomainObj){
-        return new UserEntity(userDomainObj.password(), userDomainObj.email(), userDomainObj.username(), userDomainObj.full_name());
+        return new UserEntity(userDomainObj.id(),userDomainObj.password(), userDomainObj.email(), userDomainObj.username(), userDomainObj.full_name());
     }
 
     User toDomain(UserEntity userEntityObj){
-        return new User(userEntityObj.getFull_name(), userEntityObj.getUsername(), userEntityObj.getEmail(), userEntityObj.getPassword());
+        return new User(userEntityObj.getId(), userEntityObj.getFull_name(), userEntityObj.getUsername(), userEntityObj.getEmail(), userEntityObj.getPassword());
     }
 }
